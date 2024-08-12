@@ -1,34 +1,30 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
-// interface for the user document
-interface IUser extends Document {
+export interface IUser extends Document {
+    _id: mongoose.Types.ObjectId;
     name: string;
     email: string;
     password: string;
+    isAdmin: boolean;
+    cartData: object;
+    resetPasswordToken?: string;
+    resetPasswordExpires?: Date;
 }
 
+// User schema
 const userSchema: Schema<IUser> = new Schema(
     {
-        name: {
-            type: String,
-            required: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
+        name: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
+        isAdmin: { type: Boolean, required: true, default: false },
+        cartData: { type: Object, default: {} },
+        resetPasswordToken: { type: String },
+        resetPasswordExpires: { type: Date },
     },
-    {
-        timestamps: true,
-    }
+    { minimize: false }
 );
 
-// export the model
 const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 
 export default User;
