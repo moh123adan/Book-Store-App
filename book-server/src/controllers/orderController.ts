@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: '2022-11-15',
 });
 
-export const placeOrder = async (req: Request, res: Response): Promise<void> => {
+export const placeOrder = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const { userId, items, totalAmount, shippingAddress, paymentMethod } = req.body;
 
@@ -55,7 +55,7 @@ export const placeOrder = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-export const listOrders = async (req: Request, res: Response): Promise<void> => {
+export const listOrders = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const orders = await Order.find({});
         res.json({ success: true, data: orders });
@@ -65,7 +65,7 @@ export const listOrders = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-export const userOrders = async (req: Request, res: Response): Promise<void> => {
+export const userOrders = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const orders = await Order.find({ userId: req.body.userId });
         res.json({ success: true, data: orders });
@@ -75,7 +75,7 @@ export const userOrders = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-export const updateStatus = async (req: Request, res: Response): Promise<void> => {
+export const updateStatus = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         await Order.findByIdAndUpdate(req.body.orderId, {
             status: req.body.status,
@@ -87,7 +87,7 @@ export const updateStatus = async (req: Request, res: Response): Promise<void> =
     }
 };
 
-export const verifyOrder = async (req: Request, res: Response): Promise<void> => {
+export const verifyOrder = async (req: Request, res: Response, next: unknown): Promise<void> => {
     const { orderId, success } = req.body;
     try {
         if (success === 'true') {
