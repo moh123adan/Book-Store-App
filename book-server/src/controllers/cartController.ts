@@ -3,7 +3,7 @@ import Cart from '../models/cartModel';
 import mongoose from 'mongoose';
 
 // Add a book to the user's cart
-export const addToCart = async (req: Request, res: Response): Promise<void> => {
+export const addToCart = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const { userId, bookId } = req.body;
 
@@ -39,7 +39,7 @@ export const addToCart = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Remove a book from the user's cart
-export const removeFromCart = async (req: Request, res: Response): Promise<void> => {
+export const removeFromCart = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const { userId, bookId } = req.body;
 
@@ -71,7 +71,7 @@ export const removeFromCart = async (req: Request, res: Response): Promise<void>
 };
 
 // Get the user's cart
-export const getCart = async (req: Request, res: Response): Promise<void> => {
+export const getCart = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const { userId } = req.body;
 

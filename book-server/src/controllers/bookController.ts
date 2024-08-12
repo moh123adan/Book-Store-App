@@ -3,7 +3,7 @@ import Book from '../models/bookModel';
 import fs from 'fs';
 
 // List all books
-export const listBooks = async (req: Request, res: Response): Promise<void> => {
+export const listBooks = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const books = await Book.find({});
         const baseUrl = `${req.protocol}://${req.get('host')}/uploads/`;
@@ -21,7 +21,7 @@ export const listBooks = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Add a new book
-export const addBook = async (req: Request, res: Response): Promise<void> => {
+export const addBook = async (req: Request, res: Response, next: unknown): Promise<void> => {
     if (!req.file) {
         res.status(400).json({ success: false, message: 'No file uploaded' });
         return;
@@ -50,7 +50,7 @@ export const addBook = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Remove a book
-export const removeBook = async (req: Request, res: Response): Promise<void> => {
+export const removeBook = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const book = await Book.findById(req.params.id);
         if (!book) {
@@ -75,7 +75,7 @@ export const removeBook = async (req: Request, res: Response): Promise<void> => 
 };
 
 // Update a book
-export const updateBook = async (req: Request, res: Response): Promise<void> => {
+export const updateBook = async (req: Request, res: Response, next: unknown): Promise<void> => {
     const { id } = req.params;
 
     try {
@@ -113,7 +113,7 @@ export const updateBook = async (req: Request, res: Response): Promise<void> => 
 };
 
 // Get all categories
-export const getCategories = async (req: Request, res: Response): Promise<void> => {
+export const getCategories = async (req: Request, res: Response, next: unknown): Promise<void> => {
     try {
         const categories = await Book.distinct('category');
         res.json({ success: true, data: categories });
