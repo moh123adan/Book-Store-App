@@ -2,21 +2,21 @@ import express, { Request, Response, NextFunction } from 'express';
 import {
     loginUser,
     registerUser,
-    getUserProfile,
-    updateUserProfile,
-    getUsers,
-    forgotPassword,
-    resetPassword,
-    getResetPasswordToken,
+    // getUserProfile,
+    // updateUserProfile,
+    // getUsers,
+    // forgotPassword,
+    // resetPassword,
+    // getResetPasswordToken,
     googleLogin,
-    createUser,
-    updateUser,
-    deleteUser,
+    // createUser,
+    // updateUser,
+    // deleteUser,
     logoutUser,
 } from '../controllers/userController';
 import { protect } from '../middleware/authMiddleware';
 import { admin } from '../middleware/adminMiddleware';
-import uploads from '../middleware/uploadMiddleware';
+// import uploads from '../middleware/uploadMiddleware';
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ router.post('/google-login', (req: Request, res: Response, next: NextFunction) =
 });
 
 // Route to register a new user
-router.post('/register', uploads.single('profilePicture'), (req: Request, res: Response, next: NextFunction) => {
+router.post('/register', (req: Request, res: Response, next: NextFunction) => {
     registerUser(req, res, next);
 });
 

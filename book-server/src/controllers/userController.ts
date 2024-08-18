@@ -19,55 +19,53 @@ const createToken = (id: string, isAdmin: boolean): string => {
 // Google OAuth2 Client
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-
 // Register user
-const registerUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { name, email, password, password_confirm, isAdmin } = req.body;
-    const profilePicture = req.file ? req.file.path : null;
-  
-    // Check if user already exists
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.status(400).json({ success: false, message: 'User already exists' });
-    }
-  
-    // Validate email format & strong password
-    if (!validator.isEmail(email)) {
-      return res.status(400).json({ success: false, message: 'Please enter a valid email' });
-    }
-    if (password.length < 8) {
-      return res.status(400).json({ success: false, message: 'Please enter a strong password' });
-    }
-  
-    // Hashing user password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-  
-    const newUser = new User({
-      name,
-      email,
-      profilePicture,
-      password: hashedPassword,
-      isAdmin,
-    });
-    const user = await newUser.save();
-  
-    // Convert user._id to a string
-    const token = createToken(user._id.toString(), user.isAdmin);
-  
-    return res.status(201).json({
-      success: true,
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        profilePicture: user.profilePicture,
-        isAdmin: user.isAdmin,
-      },
-      token,
-    });
+const registerUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+  const { name, email, password, password_confirm, isAdmin } = req.body;
+  const profilePicture = req.file ? req.file.path : null;
+
+  // Check if user already exists
+  const exists = await User.findOne({ email });
+  if (exists) {
+    return res.status(400).json({ success: false, message: 'User already exists' });
+  }
+
+  // Validate email format & strong password
+  if (!validator.isEmail(email)) {
+    return res.status(400).json({ success: false, message: 'Please enter a valid email' });
+  }
+  if (password.length < 8) {
+    return res.status(400).json({ success: false, message: 'Please enter a strong password' });
+  }
+
+  // Hashing user password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const newUser = new User({
+    name,
+    email,
+    profilePicture,
+    password: hashedPassword,
+    isAdmin,
   });
-  
+  const user = await newUser.save();
+
+  // Convert user._id to a string
+  const token = createToken(user._id.toString(), user.isAdmin);
+
+  return res.status(201).json({
+    success: true,
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      isAdmin: user.isAdmin,
+    },
+    token,
+  });
+});
 
 // Login user
 const loginUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
@@ -84,7 +82,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<Resp
     return res.status(400).json({ success: false, message: 'Invalid credentials' });
   }
 
-  const token = createToken(user._id, user.isAdmin);
+  const token = createToken(user._id.toString(), user.isAdmin);
   return res.json({
     success: true,
     user: {
@@ -121,7 +119,7 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
       await user.save();
     }
 
-    const token = createToken(user._id, user.isAdmin);
+    const token = createToken(user._id.toString(), user.isAdmin);
 
     return res.status(200).json({
       success: true,
@@ -138,21 +136,20 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
     return res.status(401).json({ success: false, message: 'Invalid token' });
   }
 });
+// Logout user
+const logoutUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+  // Clear the token from the client-side (assuming the token is stored in an HTTP-only cookie)
+  res.clearCookie('token'); // Or however, the token is stored on the client
 
-// Other controller functions remain the same, using the `isAdmin` field where necessary
+  return res.status(200).json({ success: true, message: 'User logged out successfully' });
+});
+
+// Define your other controller functions as needed, ensuring they return the correct response type
 
 export {
   loginUser,
-  logoutUser,
   registerUser,
-  getUserProfile,
-  updateUserProfile,
-  getUsers,
-  forgotPassword,
-  getResetPasswordToken,
-  resetPassword,
-  createUser,
   googleLogin,
-  updateUser,
-  deleteUser,
+  logoutUser
+  // Include other exports as needed
 };
