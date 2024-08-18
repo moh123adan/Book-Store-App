@@ -1,14 +1,14 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import expressAsyncHandler from 'express-async-handler';
-import { IUser } from '../models/userModel'; // Assuming IUser is your user interface
+import { IUser } from '../models/userModel'; 
 
 const sendPasswordResetEmail = expressAsyncHandler(async (user: IUser, resetToken: string): Promise<void> => {
     try {
         const transporter: Transporter = nodemailer.createTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
-            port: 465, // Use 465 for SSL
-            secure: true, // true for port 465, false for port 587
+            port: 465, 
+            secure: true, 
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.EMAIL_PASSWORD,
