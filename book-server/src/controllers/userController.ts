@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import asyncHandler from 'express-async-handler';
 import User, { IUser } from '../models/userModel'; // Importing the IUser interface
-import { sendPasswordResetEmail } from '../utils/sendEmail';
+// import { sendPasswordResetEmail } from '../utils/sendEmail';
 import mongoose from 'mongoose';
 import { OAuth2Client } from 'google-auth-library';
 import { Request, Response } from 'express';
@@ -20,22 +20,30 @@ const createToken = (id: string, isAdmin: boolean): string => {
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register user
-const registerUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+const registerUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, password_confirm, isAdmin } = req.body;
-  const profilePicture = req.file ? req.file.path : null;
 
   // Check if user already exists
   const exists = await User.findOne({ email });
   if (exists) {
-    return res.status(400).json({ success: false, message: 'User already exists' });
+    res.status(400).json({ success: false, message: 'User already exists' });
+    return;
   }
+
+  // Check if the email is provided
+  if (!email) {
+    res.status(400).json({ success: false, message: 'Email is required' });
+  }
+
 
   // Validate email format & strong password
   if (!validator.isEmail(email)) {
-    return res.status(400).json({ success: false, message: 'Please enter a valid email' });
+    res.status(400).json({ success: false, message: 'Please enter a valid email' });
+    return;
   }
   if (password.length < 8) {
-    return res.status(400).json({ success: false, message: 'Please enter a strong password' });
+    res.status(400).json({ success: false, message: 'Please enter a strong password' });
+    return;
   }
 
   // Hashing user password
@@ -45,7 +53,6 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<R
   const newUser = new User({
     name,
     email,
-    profilePicture,
     password: hashedPassword,
     isAdmin,
   });
@@ -54,13 +61,12 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<R
   // Convert user._id to a string
   const token = createToken(user._id.toString(), user.isAdmin);
 
-  return res.status(201).json({
+  res.status(201).json({
     success: true,
     user: {
       _id: user._id,
       name: user.name,
       email: user.email,
-      profilePicture: user.profilePicture,
       isAdmin: user.isAdmin,
     },
     token,
@@ -68,22 +74,24 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<R
 });
 
 // Login user
-const loginUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(400).json({ success: false, message: 'User does not exist' });
+    res.status(400).json({ success: false, message: 'User does not exist' });
+    return;
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    return res.status(400).json({ success: false, message: 'Invalid credentials' });
+    res.status(400).json({ success: false, message: 'Invalid credentials' });
+    return;
   }
 
   const token = createToken(user._id.toString(), user.isAdmin);
-  return res.json({
+  res.json({
     success: true,
     user: {
       _id: user._id,
@@ -96,7 +104,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<Resp
 });
 
 // Google login user
-const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { tokenId } = req.body;
 
   try {
@@ -107,7 +115,8 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
 
     const payload = ticket.getPayload();
     if (!payload) {
-      return res.status(400).json({ success: false, message: 'Invalid Google token' });
+      res.status(400).json({ success: false, message: 'Invalid Google token' });
+      return;
     }
 
     const { sub, email, name } = payload;
@@ -121,7 +130,7 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
 
     const token = createToken(user._id.toString(), user.isAdmin);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       user: {
         _id: user._id,
@@ -133,23 +142,22 @@ const googleLogin = asyncHandler(async (req: Request, res: Response): Promise<Re
     });
   } catch (error) {
     console.error(error);
-    return res.status(401).json({ success: false, message: 'Invalid token' });
+    res.status(401).json({ success: false, message: 'Invalid token' });
   }
 });
+
 // Logout user
-const logoutUser = asyncHandler(async (req: Request, res: Response): Promise<Response> => {
+const logoutUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   // Clear the token from the client-side (assuming the token is stored in an HTTP-only cookie)
   res.clearCookie('token'); // Or however, the token is stored on the client
 
-  return res.status(200).json({ success: true, message: 'User logged out successfully' });
+  res.status(200).json({ success: true, message: 'User logged out successfully' });
 });
-
-// Define your other controller functions as needed, ensuring they return the correct response type
 
 export {
   loginUser,
   registerUser,
   googleLogin,
-  logoutUser
+  logoutUser,
   // Include other exports as needed
 };

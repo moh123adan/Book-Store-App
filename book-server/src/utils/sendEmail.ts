@@ -1,8 +1,7 @@
 import nodemailer, { Transporter } from 'nodemailer';
-import expressAsyncHandler from 'express-async-handler';
 import { IUser } from '../models/userModel'; 
 
-const sendPasswordResetEmail = expressAsyncHandler(async (user: IUser, resetToken: string): Promise<void> => {
+const sendPasswordResetEmail = async (user: IUser, resetToken: string): Promise<void> => {
     try {
         const transporter: Transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -57,6 +56,6 @@ const sendPasswordResetEmail = expressAsyncHandler(async (user: IUser, resetToke
     } catch (error) {
         console.error('Error sending password reset email:', error);
     }
-});
+};
 
 export { sendPasswordResetEmail };
