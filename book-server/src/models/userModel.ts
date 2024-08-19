@@ -9,6 +9,7 @@ export interface IUser extends Document {
     cartData: object;
     resetPasswordToken?: string;
     resetPasswordExpires?: Date;
+    adminKey?: string;  // Optional because it may not be present
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -27,6 +28,7 @@ const userSchema: Schema<IUser> = new Schema(
         cartData: { type: Object, default: {} },
         resetPasswordToken: { type: String },
         resetPasswordExpires: { type: Date },
+        adminKey: { type: String },  // Add the adminKey field here
     },
     {
         minimize: false,
