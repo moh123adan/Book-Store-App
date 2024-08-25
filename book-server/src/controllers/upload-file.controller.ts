@@ -18,10 +18,17 @@ router.post('/', upload.single("filename"), async (req, res) => {
     try {
         const dateTime = giveCurrentDateTime();
 
-        
+        const storageRef = ref(storage, `files/${req.file.originalname + "       " + dateTime}`);
+
+
+        const metadata = {
+            contentType: req.file.mimetype,
+        }
+
+
 
     } catch (error) {
-        
+
     }
 })
 
