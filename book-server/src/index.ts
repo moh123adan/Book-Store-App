@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import userRoutes from './routes/userRoutes'
+import bookRoutes from './routes/bookRoutes'
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 // app.use('/api/jobs', jobRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/books', bookRoutes);
 
 
 // Start the server

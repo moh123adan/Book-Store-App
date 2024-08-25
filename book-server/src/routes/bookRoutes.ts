@@ -19,7 +19,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Route to add a new book
-router.post('/add', upload.single('image'), (req: Request, res: Response, next: NextFunction) => {
+router.post('/add', (req: Request, res: Response, next: NextFunction) => {
     addBook(req, res, next);
 });
 
@@ -29,7 +29,7 @@ router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Route to update a book
-router.put('/update/:id', upload.single('image'), (req: Request, res: Response, next: NextFunction) => {
+router.put('/update/:id', (req: Request, res: Response, next: NextFunction) => {
     updateBook(req, res, next);
 });
 
