@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import Book from '../models/bookModel';
 import fs from 'fs';
+import { storage } from '../config/firebase.config'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 // List all books
 export const listBooks = async (req: Request, res: Response, next: unknown): Promise<void> => {
@@ -21,31 +24,40 @@ export const listBooks = async (req: Request, res: Response, next: unknown): Pro
 };
 
 // Add a new book
-export const addBook = async (req: Request, res: Response, next: unknown): Promise<void> => {
+export const addBook = async (req: Request, res: Response): Promise<void> => {
     if (!req.file) {
-        res.status(400).json({ success: false, message: 'No file uploaded' });
+        res.status(400).json({ success: false, message: 'No image file uploaded' });
         return;
     }
 
-    const imageFilename = req.file.filename;
-
-    const book = new Book({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        price: req.body.price,
-        category: req.body.category,
-        image: imageFilename,
-        stock: req.body.stock,
-        tags: req.body.tags || [],
-    });
-
     try {
+        // Generate a unique file name with timestamp
+        const dateTime = Date.now();
+        const storageRef = ref(storage, `books/${dateTime}_${req.file.originalname}`);
+
+        // Upload the file to Firebase Storage
+        await uploadBytes(storageRef, req.file.buffer);
+
+        // Get the download URL for the uploaded image
+        const downloadURL = await getDownloadURL(storageRef);
+
+        // Create a new book entry with the image URL
+        const book = new Book({
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            price: req.body.price,
+            category: req.body.category,
+            image: downloadURL,  // Save the image download URL in the database
+            stock: req.body.stock,
+            tags: req.body.tags || [],
+        });
+
         await book.save();
-        res.json({ success: true, message: 'Book added', data: book });
+        res.json({ success: true, message: 'Book added successfully', data: book });
     } catch (error) {
-        console.error('Error saving book:', error);
-        res.status(500).json({ success: false, message: 'Error saving book' });
+        console.error('Error adding book:', error);
+        res.status(500).json({ success: false, message: 'Error adding book' });
     }
 };
 
