@@ -24,7 +24,7 @@ export const listBooks = async (req: Request, res: Response, next: unknown): Pro
 };
 
 // Add a new book
-export const addBook = async (req: Request, res: Response): Promise<void> => {
+export const addBook = async (req: Request, res: Response, next: unknown): Promise<void> => {
     if (!req.file) {
         res.status(400).json({ success: false, message: 'No image file uploaded' });
         return;
