@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db';
 import userRoutes from './routes/userRoutes'
 import bookRoutes from './routes/bookRoutes'
+import uploadController from './controllers/upload-file.controller'
 
 dotenv.config();
 
