@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Footer from "./components/Footer";
 import AboutScreen from "./screens/AboutScreen";
 import ContactScreen from "./screens/ContactScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/contact" element={<ContactScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
+          <Route path="/profile" element={<ProfileScreen />} />
           {/* Add more routes as needed */}
         </Routes>
         <Footer />
