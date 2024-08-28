@@ -4,7 +4,7 @@ import RegisterScreen from "./screens/RegisrerScreen";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Footer from "./components/Footer";
-import About
+import AboutScreen from "./screens/AboutScreen";
 
 const App = () => {
   return (
@@ -13,6 +13,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
           {/* Add more routes as needed */}
