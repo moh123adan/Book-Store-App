@@ -6,7 +6,7 @@ import {
     updateBook,
     getCategories,
 } from "../controllers/bookController";
-import { upload } from "../config/multerConfig";
+// import { upload } from "../config/multerConfig";
 
 const router = express.Router();
 
