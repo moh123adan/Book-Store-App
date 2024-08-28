@@ -1,10 +1,12 @@
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisrerScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Footer from "./components/Footer";
 import AboutScreen from "./screens/AboutScreen";
+import ContactScreen from "./screens/ContactScreen";
 
 const App = () => {
   return (
@@ -14,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutScreen />} />
+          <Route path="/contact" element={<ContactScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
           {/* Add more routes as needed */}
