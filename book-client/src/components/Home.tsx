@@ -1,27 +1,43 @@
 // src/components/Home.tsx
 import React from 'react';
-import { Book, ShoppingCart, Star, User, Heart, Truck, Tag } from 'lucide-react';
+import { Book, ShoppingCart, Star, User, Heart, Truck, Tag, BookOpen, ThumbsUp, DollarSign, Shield } from 'lucide-react';
 
 const Home: React.FC = () => {
     return (
-        <div className="mt-24 min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 p-8">
+        <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 p-8">
             <div className="container mx-auto">
                 {/* Hero Section */}
                 <section className="text-center text-white mb-12">
-                    <h1 className="text-5xl font-bold mb-4">Welcome to BookStore</h1>
-                    <p className="text-lg mb-8">Your one-stop shop for all the latest and greatest books.</p>
+                    <h1 className="text-5xl font-bold mb-4 flex justify-center items-center">
+                        <BookOpen className="mr-3" size={50} /> Welcome to BookStore
+                    </h1>
+                    <p className="text-lg mb-8">Your one-stop shop for all the latest and greatest books. Whether you're looking for the classics or the latest releases, we've got you covered. Join our community of book lovers today!</p>
+                    <div className="flex justify-center space-x-4 mb-8">
+                        <div className="flex flex-col items-center">
+                            <ThumbsUp className="text-yellow-400" size={40} />
+                            <p className="mt-2">Trusted by Thousands</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <DollarSign className="text-green-400" size={40} />
+                            <p className="mt-2">Best Prices Guaranteed</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <Shield className="text-blue-400" size={40} />
+                            <p className="mt-2">Secure Payments</p>
+                        </div>
+                    </div>
                     <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition-colors">
                         Shop Now
                     </button>
                 </section>
 
                 {/* Featured Books Section */}
-                <section className="mb-12">
+                <section className="mb-12 text-center">
                     <h2 className="text-3xl font-semibold text-white mb-6">Featured Books</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
                         {/* Example book items */}
                         <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <Book className="text-blue-500 mb-4" size={48} />
+                            <Book className="text-blue-500 mb-4 mx-auto" size={48} />
                             <h3 className="text-xl font-bold text-gray-800 mb-2">The Great Gatsby</h3>
                             <p className="text-gray-600 mb-4">A novel by F. Scott Fitzgerald set in the Jazz Age.</p>
                             <div className="flex items-center justify-between mb-4">
@@ -37,7 +53,7 @@ const Home: React.FC = () => {
                             </button>
                         </div>
                         <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <Book className="text-blue-500 mb-4" size={48} />
+                            <Book className="text-blue-500 mb-4 mx-auto" size={48} />
                             <h3 className="text-xl font-bold text-gray-800 mb-2">To Kill a Mockingbird</h3>
                             <p className="text-gray-600 mb-4">A novel by Harper Lee about racial injustice in the South.</p>
                             <div className="flex items-center justify-between mb-4">
@@ -59,7 +75,7 @@ const Home: React.FC = () => {
                 {/* Why Choose Us Section */}
                 <section className="bg-white p-8 rounded-lg shadow-lg mb-12">
                     <h2 className="text-3xl font-semibold text-gray-800 text-center mb-8">Why Choose Us?</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
                         <div className="flex flex-col items-center">
                             <Truck className="text-blue-500 mb-4" size={48} />
                             <h3 className="text-xl font-semibold text-gray-800 mb-2">Free Shipping</h3>
@@ -74,6 +90,11 @@ const Home: React.FC = () => {
                             <Heart className="text-blue-500 mb-4" size={48} />
                             <h3 className="text-xl font-semibold text-gray-800 mb-2">Customer Satisfaction</h3>
                             <p className="text-gray-600">We prioritize our customers</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <ThumbsUp className="text-blue-500 mb-4" size={48} />
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2">Top Ratings</h3>
+                            <p className="text-gray-600">High ratings on all products</p>
                         </div>
                     </div>
                 </section>
@@ -92,7 +113,16 @@ const Home: React.FC = () => {
                             <h3 className="text-xl font-bold text-gray-800 mb-2">George R.R. Martin</h3>
                             <p className="text-gray-600">Author of A Song of Ice and Fire</p>
                         </div>
-                        {/* Add more authors as needed */}
+                        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                            <User className="text-blue-500 mb-4" size={48} />
+                            <h3 className="text-xl font-bold text-gray-800 mb-2">Harper Lee</h3>
+                            <p className="text-gray-600">Author of To Kill a Mockingbird</p>
+                        </div>
+                        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                            <User className="text-blue-500 mb-4" size={48} />
+                            <h3 className="text-xl font-bold text-gray-800 mb-2">F. Scott Fitzgerald</h3>
+                            <p className="text-gray-600">Author of The Great Gatsby</p>
+                        </div>
                     </div>
                 </section>
             </div>

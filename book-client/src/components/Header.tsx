@@ -4,7 +4,7 @@ import { ShoppingCart, User, BookOpen } from "lucide-react";
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 shadow-md">
+    <header className="bg-gradient-to-r from-blue-700 to-purple-600 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
           <BookOpen className="text-white mr-2" size={32} />
