@@ -25,7 +25,7 @@ router.post(
 );
 
 // Route to remove a book
-router.delete("/:id", (req: Request, res: Response, next: NextFunction) => {
+router.delete("/delete/:id", (req: Request, res: Response, next: NextFunction) => {
     removeBook(req, res, next);
 });
 

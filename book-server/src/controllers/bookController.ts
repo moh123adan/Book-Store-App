@@ -17,8 +17,6 @@ initializeApp(config.firebaseConfig);
 // Initialize Cloud Storage and get a reference to the service
 const storage = getStorage();
 
-// Setting up multer as a middleware to grab photo uploads
-// const upload = multer({ storage: multer.memoryStorage() });
 
 // List all books
 export const listBooks = async (
