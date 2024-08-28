@@ -12,8 +12,11 @@
   "dependencies": {
     "@tanstack/react-query": "^5.51.24",
     "@types/react-query": "^1.2.9",
+    "axios": "^1.7.5",
+    "firebase": "^10.13.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

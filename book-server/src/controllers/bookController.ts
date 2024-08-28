@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Book from '../models/bookModel';
 import fs from 'fs';
-import { storage } from '../config/firebase.config'
+import { firebaseConfig } from '../config/firebase.config'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 
@@ -33,7 +33,7 @@ export const addBook = async (req: Request, res: Response, next: unknown): Promi
     try {
         // Generate a unique file name with timestamp
         const dateTime = Date.now();
-        const storageRef = ref(storage, `books/${dateTime}_${req.file.originalname}`);
+        const storageRef = ref(firebaseConfig, `books/${dateTime}_${req.file.originalname}`);
 
         // Upload the file to Firebase Storage
         await uploadBytes(storageRef, req.file.buffer);
