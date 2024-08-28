@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisrerScreen";
@@ -8,7 +7,7 @@ import Footer from "./components/Footer";
 import AboutScreen from "./screens/AboutScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-
+import CartScreen from "./screens/CartScreen";
 const App = () => {
   return (
     <Router>
@@ -21,6 +20,7 @@ const App = () => {
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
+          <Route path="/cart" element={<CartScreen />} />
           {/* Add more routes as needed */}
         </Routes>
         <Footer />
