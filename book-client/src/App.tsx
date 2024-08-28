@@ -1,7 +1,11 @@
+import LoginScreen from "./screens/LoginScreen";
+
 const App = () => {
-  return <div>
-  <h2>hello React</h2>
-  </div>;
+  return (
+    <div>
+      <LoginScreen />
+    </div>
+  );
 };
 
 export default App;
