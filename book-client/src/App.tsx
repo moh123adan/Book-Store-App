@@ -2,6 +2,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisrerScreen";
 import Header from "./components/Header";
 import Home from "./components/Home";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -9,6 +10,7 @@ const App = () => {
       {/* <LoginScreen /> */}
       <Header />
       <Home />
+      <Footer />
       {/* <RegisterScreen /> */}
     </div>
   );

@@ -4,7 +4,7 @@ import { Book, ShoppingCart, Star, User, Heart, Truck, Tag } from 'lucide-react'
 
 const Home: React.FC = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 p-8">
+        <div className="mt-24 min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 p-8">
             <div className="container mx-auto">
                 {/* Hero Section */}
                 <section className="text-center text-white mb-12">
