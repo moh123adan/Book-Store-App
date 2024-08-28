@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db';
 import userRoutes from './routes/userRoutes'
 import bookRoutes from './routes/bookRoutes'
-// import uploadRouter from './controllers/upload-file.controller'
+import orderRoutes from './routes/orderRoutes'
+import cartRoutes from './routes/cartRoutes'
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 // app.use('/api/jobs', jobRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
+app.use('/api/order', orderRoutes);
+app.use('/api/cart', cartRoutes);
 
 
 // Start the server
