@@ -4,8 +4,9 @@ import Stripe from 'stripe';
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: '2022-11-15',
+    apiVersion: '2024-06-20',
 });
 
 export const placeOrder = async (req: Request, res: Response, next: unknown): Promise<void> => {
@@ -28,17 +29,20 @@ export const placeOrder = async (req: Request, res: Response, next: unknown): Pr
         });
 
         await newOrder.save();
-
-        const line_items = items.map((item: { bookId: string; name: string; price: number; quantity: number }) => ({
+        const line_items = items.map((item: { name: string; price: number; quantity: number }) => ({
             price_data: {
                 currency: 'usd',
                 product_data: {
-                    name: item.name,
+                    name: item.name || 'Default Book Name', // Ensure this is correctly set
                 },
-                unit_amount: item.price * 100, // Stripe expects amount in the smallest currency unit
+                unit_amount: Math.round(item.price * 100),
             },
             quantity: item.quantity,
         }));
+
+
+
+        console.log(JSON.stringify(line_items, null, 2));
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -50,8 +54,13 @@ export const placeOrder = async (req: Request, res: Response, next: unknown): Pr
 
         res.json({ success: true, session_url: session.url });
     } catch (error) {
-        console.log('Error in placeOrder:', error.message);
-        res.status(500).json({ success: false, message: 'Error placing order' });
+        if (error instanceof Error) {
+            console.log('Error in placeOrder:', error.message);
+            res.status(500).json({ success: false, message: 'Error placing order' })
+        } else {
+            console.log('Unknown error in placeOrder:', error);
+            res.status(500).json({ success: false, message: 'Unknown error placing order' });
+        }
     }
 };
 
@@ -60,8 +69,13 @@ export const listOrders = async (req: Request, res: Response, next: unknown): Pr
         const orders = await Order.find({});
         res.json({ success: true, data: orders });
     } catch (error) {
-        console.log('Error in listOrders:', error.message);
-        res.status(500).json({ success: false, message: 'Error listing orders' });
+        if (error instanceof Error) {
+            console.log('Error in listOrders:', error.message);
+            res.status(500).json({ success: false, message: 'Error listing orders' })
+        } else {
+            console.log('Unknown error in listing order:', error);
+            res.status(500).json({ success: false, message: 'Unknown error listing order' });
+        }
     }
 };
 
@@ -70,8 +84,13 @@ export const userOrders = async (req: Request, res: Response, next: unknown): Pr
         const orders = await Order.find({ userId: req.body.userId });
         res.json({ success: true, data: orders });
     } catch (error) {
-        console.log('Error in userOrders:', error.message);
-        res.status(500).json({ success: false, message: 'Error fetching user orders' });
+        if (error instanceof Error) {
+            console.log('Error in userOrders:', error.message);
+            res.status(500).json({ success: false, message: 'Error fetching user orders' })
+        } else {
+            console.log('Unknown error in userOrder:', error);
+            res.status(500).json({ success: false, message: 'Unknown error user order' });
+        }
     }
 };
 
@@ -82,8 +101,13 @@ export const updateStatus = async (req: Request, res: Response, next: unknown): 
         });
         res.json({ success: true, message: 'Status updated' });
     } catch (error) {
-        console.log('Error in updateStatus:', error.message);
-        res.status(500).json({ success: false, message: 'Error updating status' });
+        if (error instanceof Error) {
+            console.log('Error in updateStatus:', error.message);
+            res.status(500).json({ success: false, message: 'Error updating status' })
+        } else {
+            console.log('Unknown error in status order:', error);
+            res.status(500).json({ success: false, message: 'Unknown error updated status order' });
+        }
     }
 };
 
@@ -98,7 +122,12 @@ export const verifyOrder = async (req: Request, res: Response, next: unknown): P
             res.json({ success: false, message: 'Payment not verified' });
         }
     } catch (error) {
-        console.log('Error in verifyOrder:', error.message);
-        res.status(500).json({ success: false, message: 'Error verifying payment' });
+        if (error instanceof Error) {
+            console.log('Error in verifyOrder:', error.message);
+            res.status(500).json({ success: false, message: 'Error verifying payment' })
+        } else {
+            console.log('Unknown error in verifyOder:', error);
+            res.status(500).json({ success: false, message: 'Unknown error veryfiying order' });
+        }
     }
 };
