@@ -6,7 +6,7 @@ import {
     updateBook,
     getCategories,
 } from "../controllers/bookController";
-// import { upload } from "../config/multerConfig";
+import { upload } from "../config/multerConfig";
 
 const router = express.Router();
 
@@ -17,8 +17,8 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 // Route to add a new book
 router.post(
-    "/add",
-    upload.single("image"),
+    "/add-book",
+    upload.single('image'),
     (req: Request, res: Response, next: NextFunction) => {
         addBook(req, res, next);
     }

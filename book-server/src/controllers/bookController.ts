@@ -18,7 +18,7 @@ initializeApp(config.firebaseConfig);
 const storage = getStorage();
 
 // Setting up multer as a middleware to grab photo uploads
-const upload = multer({ storage: multer.memoryStorage() });
+// const upload = multer({ storage: multer.memoryStorage() });
 
 // List all books
 export const listBooks = async (
@@ -48,8 +48,6 @@ export const addBook = async (
     res: Response,
     next: unknown
 ): Promise<void> => {
-    console.log("File:", req.file);
-    console.log("Body:", req.body);
     if (!req.file) {
         res.status(400).json({ success: false, message: "No image file uploaded" });
         return;
@@ -95,7 +93,7 @@ export const addBook = async (
         await book.save();
         res.json({ success: true, message: "Book added successfully", data: book });
     } catch (error) {
-        console.error("Error adding book:", error);
+        console.error('Error adding book:', error);
         res.status(500).json({ success: false, message: "Error adding book" });
     }
 };
