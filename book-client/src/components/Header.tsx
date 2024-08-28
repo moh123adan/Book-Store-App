@@ -20,6 +20,12 @@ const Header: React.FC = () => {
           <a href="/contact" className="text-white text-lg hover:text-gray-200">
             Contact
           </a>
+          <a href="/login" className="text-white text-lg hover:text-gray-200">
+            Login
+          </a>
+          <a href="/register" className="text-white text-lg hover:text-gray-200">
+            Register
+          </a>
         </nav>
         <div className="flex items-center space-x-4">
           <a href="/cart" className="text-white hover:text-gray-200">
