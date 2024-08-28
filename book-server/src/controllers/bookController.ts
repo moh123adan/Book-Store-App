@@ -1,8 +1,18 @@
 import { Request, Response } from 'express';
 import Book from '../models/bookModel';
 import fs from 'fs';
-import { firebaseConfig } from '../config/firebase.config'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import multer from "multer";
+import config from "../config/firebase.config"
+
+
+
+//Initialize a firebase application
+initializeApp(config.firebaseConfig);
+
+// Initialize Cloud Storage and get a reference to the service
+const storage = getStorage()
 
 
 // List all books
@@ -33,7 +43,7 @@ export const addBook = async (req: Request, res: Response, next: unknown): Promi
     try {
         // Generate a unique file name with timestamp
         const dateTime = Date.now();
-        const storageRef = ref(firebaseConfig, `books/${dateTime}_${req.file.originalname}`);
+        const storageRef = ref(config, `books/${dateTime}_${req.file.originalname}`);
 
         // Upload the file to Firebase Storage
         await uploadBytes(storageRef, req.file.buffer);

@@ -1,75 +1,56 @@
-import express, { Router, Request, Response } from "express";
+import express, { Router } from "express";
 import { initializeApp } from "firebase/app";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import multer from "multer";
-import config from "../config/firebase.config";
-
-// Extend the Express Request interface to include the file property
-declare module "express-serve-static-core" {
-  interface Request {
-    file?: Express.Multer.File;
-  }
-}
+import config from "../config/firebase.config"
 
 const router: Router = express.Router();
 
+//Initialize a firebase application
 initializeApp(config.firebaseConfig);
 
+// Initialize Cloud Storage and get a reference to the service
 const storage = getStorage();
+
+// Setting up multer as a middleware to grab photo uploads
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post(
-  "/",
-  upload.single("filename"),
-  async (req: Request, res: Response) => {
+router.post("/", upload.single("filename"), async (req, res) => {
     try {
-      if (!req.file) {
-        return res.status(400).send({ message: "No file uploaded" });
-      }
+        const dateTime = giveCurrentDateTime();
 
-      const dateTime = giveCurrentDateTime();
-      const storageRef = ref(
-        storage,
-        `files/${req.file.originalname}_${dateTime}`
-      );
+        const storageRef = ref(storage, `files/${req.file.originalname + "       " + dateTime}`);
 
-      const metadata = {
-        contentType: req.file.mimetype,
-      };
+        // Create file metadata including the content type
+        const metadata = {
+            contentType: req.file.mimetype,
+        };
 
-      const snapshot = await uploadBytesResumable(
-        storageRef,
-        req.file.buffer,
-        metadata
-      );
-      const downloadURL = await getDownloadURL(snapshot.ref);
+        // Upload the file in the bucket storage
+        const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+        //by using uploadBytesResumable we can control the progress of uploading like pause, resume, cancel
 
-      console.log("File successfully uploaded.");
-      return res.send({
-        message: "File uploaded to Firebase Storage",
-        name: req.file.originalname,
-        type: req.file.mimetype,
-        downloadURL: downloadURL,
-      });
+        // Grab the public url
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        console.log('File successfully uploaded.');
+        return res.send({
+            message: 'file uploaded to firebase storage',
+            name: req.file.originalname,
+            type: req.file.mimetype,
+            downloadURL: downloadURL
+        })
     } catch (error) {
-      console.error("Error uploading file:", error);
-      return res.status(400).send({ message: error.message });
+        return res.status(400).send(error.message)
     }
-  }
-);
+});
 
 const giveCurrentDateTime = () => {
-  const today = new Date();
-  const date =
-    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-  const time =
-    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  return date + "_" + time;
-};
+    const today = new Date();
+    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date + ' ' + time;
+    return dateTime;
+}
 
 export default router;
